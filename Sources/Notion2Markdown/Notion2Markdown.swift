@@ -89,7 +89,24 @@ public class Notion2Markdown {
         markdownContents: String,
         outputDirectory: URL
     ) throws {
+        let yamlFrontMatter = """
+        ---
+        author: Kyle Haptonstall
+        date: \(DateFormatter.yamlDateFormatter.string(from: .now))
+        ---
+        """
+
+        let pageContents = [yamlFrontMatter, markdownContents].joined(separator: .newline)
         let url = outputDirectory.appending(path: "\(fileName).md")
-        try markdownContents.write(to: url, atomically: true, encoding: .utf8)
+        try pageContents.write(to: url, atomically: true, encoding: .utf8)
     }
+}
+
+private extension DateFormatter {
+  /// A date formatted used for dates contained within YAML front matter. Formats dates in the style `y-MM-dd HH:mm` (e.g. 2024-01-30 08:00).
+  static let yamlDateFormatter: DateFormatter = {
+      var formatter = DateFormatter()
+      formatter.dateFormat = "y-MM-dd HH:mm"
+      return formatter
+  }()
 }
