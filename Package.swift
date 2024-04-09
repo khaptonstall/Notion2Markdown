@@ -9,12 +9,16 @@ let package = Package(
         .executable(name: "notion2markdown", targets: ["notion2markdown"]),
     ],
     dependencies: [
+        .package(url: "https://github.com/apple/swift-argument-parser.git", exact: "1.3.1"),
         .package(url: "https://github.com/chojnac/NotionSwift", exact: "0.8.0"),
     ],
     targets: [
         .executableTarget(
             name: "notion2markdown",
-            dependencies: ["NotionSwift"]
+            dependencies: [
+                .product(name: "ArgumentParser", package: "swift-argument-parser"),
+                .product(name: "NotionSwift", package: "NotionSwift"),
+            ]
         ),
     ]
 )
