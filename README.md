@@ -52,7 +52,6 @@ khaptonstall/notion2markdown@0.1.0
 then you can run:
 ```bash
 mint install
-mint run notion2markdown
 ```
 
 ## Usage
