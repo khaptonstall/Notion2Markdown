@@ -5,38 +5,61 @@
 //  Created by Kyle Haptonstall on 4/5/24.
 //
 
+import ArgumentParser
 import Foundation
 import NotionSwift
 
-public class Notion2Markdown {
-    // MARK: Properties
+@main
+struct Notion2Markdown: AsyncParsableCommand {
 
-    private let notion: NotionClient
+    // MARK: Configuration
 
-    // MARK: Initialization
+    static let configuration = CommandConfiguration(
+         commandName: "notion2markdown",
+         abstract: "A command-line tool for converting Notion pages into markdown."
+     )
 
-    init(notionToken: String) {
-        self.notion = NotionClient(accessKeyProvider: StringAccessKeyProvider(accessKey: notionToken))
-    }
+    // MARK: Arguments
 
-    func run(databaseID: String, outputDirectory: URL) async throws {
-        let page = try await selectPageToPublish(databaseID: .init(databaseID))
-        guard let fileName = page.plainTextTitle else {
+    @Option(help: "Your Notion integration token.")
+    var notionToken: String
+
+    @Option(help: "The identifier of your Notion database to read from.")
+    var databaseID: String
+
+    @Option(help: "The directory to output the markdown file")
+    var outputDirectory: String?
+
+    // MARK: Command
+
+    mutating func run() async throws {
+        let client = NotionClient(accessKeyProvider: StringAccessKeyProvider(accessKey: notionToken))
+
+        // Select a Page
+        let page = try await selectPageToPublish(databaseID: .init(databaseID), notionClient: client)
+        guard let pageTitle = page.plainTextTitle else {
             throw Notion2MarkdownError.pageMissingTitle
         }
 
-        let markdown = try await convertPageToMarkdown(page)
-        try saveMarkdownFile(
-            fileName: fileName.replacingOccurrences(of: " ", with: "-"),
-            markdownContents: markdown,
-            outputDirectory: outputDirectory
-        )
+        // Convert to markdown
+        let markdown = try await convertPageToMarkdown(page, pageTitle: pageTitle, notionClient: client)
+
+        // Either print to the console, or save to the provided output directory
+        if let outputDirectory {
+            let outputURL = URL(fileURLWithPath: outputDirectory, isDirectory: true)
+                .appending(path: "\(pageTitle.replacingOccurrences(of: " ", with: "-")).md")
+            try markdown.write(to: outputURL, atomically: true, encoding: .utf8)
+        } else {
+            print(markdown)
+        }
     }
     
+    // MARK: Private API
+
     /// Displays a list of publishable pages and prompts the user to select one.
     /// - Returns: The `Page` the user selected.
-    private func selectPageToPublish(databaseID: Database.ID) async throws -> Page {
-        let response = try await notion.databaseQuery(databaseId: databaseID)
+    private func selectPageToPublish(databaseID: Database.ID, notionClient: NotionClient) async throws -> Page {
+        let response = try await notionClient.databaseQuery(databaseId: databaseID)
 
         print("Select a page you'd like to publish (enter the page index):")
         for (index, page) in response.results.enumerated() {
@@ -56,17 +79,14 @@ public class Notion2Markdown {
         return page
     }
 
-    private func convertPageToMarkdown(_ page: Page) async throws -> String {
+    private func convertPageToMarkdown(_ page: Page, pageTitle: String, notionClient: NotionClient) async throws -> String {
         // Retrieve the blocks from the page.
-        // TODO: Support pagination
-        let blocks = try await notion.blockChildren(blockId: page.id.toBlockIdentifier)
-        
+        let blocks = try await notionClient.blockChildren(blockId: page.id.toBlockIdentifier)
+
         var markdownBlocks: [String] = []
 
-        // If we have a page title, add it as a heading in the final markdown
-        if let pageTitle = page.plainTextTitle {
-            markdownBlocks.append(pageTitle.convertedToMarkdown(.heading1))
-        }
+        // Add the title as a heading in the final markdown
+        markdownBlocks.append(pageTitle.convertedToMarkdown(.heading1))
 
         // Quick way to handle numbered lists -> just increment each time we encounter one, otherwise reset the value.
         var currentNumberedListIndex = 1
@@ -82,14 +102,5 @@ public class Notion2Markdown {
         }
 
         return markdownBlocks.joined(separator: .doubleNewline)
-    }
-
-    private func saveMarkdownFile(
-        fileName: String,
-        markdownContents: String,
-        outputDirectory: URL
-    ) throws {
-        let url = outputDirectory.appending(path: "\(fileName).md")
-        try markdownContents.write(to: url, atomically: true, encoding: .utf8)
     }
 }

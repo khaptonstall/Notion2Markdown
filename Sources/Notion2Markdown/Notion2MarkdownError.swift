@@ -8,12 +8,6 @@
 import Foundation
 
 enum Notion2MarkdownError: Error {
-    case missingNotionToken
-
-    case missingDatabaseID
-
-    case missingOutputDirectory
-
     /// Occurs when providing invalid input (e.g. anything but an integer) when prompted to select a page to publish
     case invalidPageSelectionInput
     
@@ -26,12 +20,6 @@ enum Notion2MarkdownError: Error {
 extension Notion2MarkdownError: LocalizedError {
     var errorDescription: String? {
         switch self {
-        case .missingNotionToken:
-            "Please provide a valid Notion integration token"
-        case .missingDatabaseID:
-            "Please provide a valid Notion database id"
-        case .missingOutputDirectory:
-            "Please provide a valid output directory to save the markdown file"
         case .invalidPageSelectionInput:
             "Please enter a valid integer index."
         case .invalidPageSelectionIndex:
