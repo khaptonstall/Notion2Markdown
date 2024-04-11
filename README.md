@@ -47,16 +47,11 @@ To install `notion2markdown` and link it globally:
 mint install khaptonstall/notion2markdown
 ```
 
-Alternatively, you can add `notion2markdown` to your [Mintfile](https://github.com/yonaskolb/Mint#mintfile). Running `mint install` in the same directory will then install all Swift packages in your Mintfile without linking them globally.
+Alternatively, you can add `notion2markdown` to your [Mintfile](https://github.com/yonaskolb/Mint#mintfile). Running `mint boostrap` in the same directory will then install all Swift packages in your Mintfile without linking them globally.
 
 In your Mintfile:
 ```
 khaptonstall/notion2markdown@0.1.0
-```
-
-then you can run:
-```bash
-mint install
 ```
 
 ## Usage
