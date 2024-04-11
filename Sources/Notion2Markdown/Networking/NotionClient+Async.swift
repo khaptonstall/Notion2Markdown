@@ -8,7 +8,7 @@
 import Foundation
 import NotionSwift
 
-extension NotionClient {
+extension NotionClientType {
     func databaseQuery(databaseId: Database.Identifier) async throws -> ListResponse<Page> {
         try await withCheckedThrowingContinuation { continuation in
             databaseQuery(databaseId: databaseId) { result in
@@ -17,9 +17,15 @@ extension NotionClient {
         }
     }
 
-    func blockChildren(blockId: Block.Identifier) async throws -> ListResponse<ReadBlock> {
+    func blockChildren(
+        blockId: Block.Identifier,
+        params: BaseQueryParams = .init()
+    ) async throws -> ListResponse<ReadBlock> {
         try await withCheckedThrowingContinuation { continuation in
-            blockChildren(blockId: blockId) { result in
+            blockChildren(
+                blockId: blockId,
+                params: params
+            ) { result in
                 continuation.resume(with: result)
             }
         }

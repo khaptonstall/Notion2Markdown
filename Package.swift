@@ -20,5 +20,9 @@ let package = Package(
                 .product(name: "NotionSwift", package: "NotionSwift"),
             ]
         ),
+        .testTarget(
+            name: "Notion2MarkdownTests",
+            dependencies: ["notion2markdown"]
+        )
     ]
 )
