@@ -1,9 +1,4 @@
-//
-//  Notion2Markdown.swift
-//
-//
-//  Created by Kyle Haptonstall on 4/5/24.
-//
+// Copyright © 2024 Kyle Haptonstall. All rights reserved.
 
 import ArgumentParser
 import Foundation
@@ -11,13 +6,12 @@ import NotionSwift
 
 @main
 struct Notion2Markdown: AsyncParsableCommand {
-
     // MARK: Configuration
 
     static let configuration = CommandConfiguration(
-         commandName: "notion2markdown",
-         abstract: "A command-line tool for converting Notion pages into markdown."
-     )
+        commandName: "notion2markdown",
+        abstract: "A command-line tool for converting Notion pages into markdown."
+    )
 
     // MARK: Arguments
 
@@ -53,7 +47,7 @@ struct Notion2Markdown: AsyncParsableCommand {
             print(markdown)
         }
     }
-    
+
     // MARK: Private API
 
     /// Displays a list of publishable pages and prompts the user to select one.

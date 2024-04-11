@@ -1,16 +1,11 @@
-//
-//  Notion2MarkdownError.swift
-//  
-//
-//  Created by Kyle Haptonstall on 4/5/24.
-//
+// Copyright © 2024 Kyle Haptonstall. All rights reserved.
 
 import Foundation
 
 enum Notion2MarkdownError: Error {
     /// Occurs when providing invalid input (e.g. anything but an integer) when prompted to select a page to publish
     case invalidPageSelectionInput
-    
+
     /// Occurs when providing an invalid index when prompted to select a page to publish
     case invalidPageSelectionIndex
 

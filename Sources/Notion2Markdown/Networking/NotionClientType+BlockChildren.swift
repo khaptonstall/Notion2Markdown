@@ -1,9 +1,4 @@
-//
-//  NotionClientType+BlockChildren.swift
-//
-//
-//  Created by Kyle Haptonstall on 4/11/24.
-//
+// Copyright © 2024 Kyle Haptonstall. All rights reserved.
 
 import Foundation
 import NotionSwift
@@ -15,10 +10,11 @@ extension NotionClientType {
     ///   - blocks: Used internally to collect all child blocks.
     ///   - cursor: Used internally to fetch the next page of child blocks.
     ///   - hasMore: Used internally to determine if there are more child blocks to fetch.
-    func allBlockChildren(blockId: Block.Identifier,
-                          blocks: [ReadBlock] = [],
-                          cursor: String? = nil,
-                          hasMore: Bool = true
+    func allBlockChildren(
+        blockId: Block.Identifier,
+        blocks: [ReadBlock] = [],
+        cursor: String? = nil,
+        hasMore: Bool = true
     ) async throws -> [ReadBlock] {
         guard hasMore else { return blocks }
 
@@ -39,5 +35,4 @@ extension NotionClientType {
             hasMore: response.hasMore
         )
     }
-
 }

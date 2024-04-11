@@ -1,9 +1,4 @@
-//
-//  MarkdownConverter.swift
-//
-//
-//  Created by Kyle Haptonstall on 4/6/24.
-//
+// Copyright © 2024 Kyle Haptonstall. All rights reserved.
 
 import Foundation
 
@@ -63,7 +58,6 @@ extension MarkdownConverter {
         .init { "[\($0)](\(url))" }
     }
 }
-
 
 // MARK: - String + MarkdownConverter
 

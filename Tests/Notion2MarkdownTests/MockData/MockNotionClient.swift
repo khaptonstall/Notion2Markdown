@@ -1,9 +1,4 @@
-//
-//  MockNotionClient.swift
-//
-//
-//  Created by Kyle Haptonstall on 4/11/24.
-//
+// Copyright © 2024 Kyle Haptonstall. All rights reserved.
 
 import Foundation
 import NotionSwift
@@ -35,7 +30,6 @@ class MockNotionClient: NotionClientType {
     func pageCreate(request: PageCreateRequest, completed: @escaping (Result<Page, NotionClientError>) -> Void) {}
     func page(pageId: Page.Identifier, completed: @escaping (Result<Page, NotionClientError>) -> Void) {}
 
-
     // MARK: Database
 
     func databaseUpdate(databaseId: Database.Identifier, request: DatabaseUpdateRequest, completed: @escaping (Result<Database, NotionClientError>) -> Void) {}
@@ -46,7 +40,6 @@ class MockNotionClient: NotionClientType {
     // MARK: Search
 
     func search(request: SearchRequest, completed: @escaping (Result<SearchResponse, NotionClientError>) -> Void) {}
-
 
     // MARK: Users
 

@@ -1,9 +1,4 @@
-//
-//  RichText+Markdown.swift
-//
-//
-//  Created by Kyle Haptonstall on 4/5/24.
-//
+// Copyright © 2024 Kyle Haptonstall. All rights reserved.
 
 import Foundation
 import NotionSwift
@@ -11,30 +6,30 @@ import NotionSwift
 extension RichText {
     var asMarkdown: String {
         switch type {
-        case .text(let value):
+        case let .text(value):
             let content = value.content.asMarkdown(annotations: annotations)
             if let url = value.link?.url {
                 return content.convertedToMarkdown(.link(url: url))
             } else {
                 return content
             }
-        case .equation(let value):
+        case let .equation(value):
             return value.expression
-        case .mention(let value):
+        case let .mention(value):
             switch value.type {
-            case .user(let user):
+            case let .user(user):
                 return user.name ?? ""
-            case .page(let pageMentionValue):
+            case let .page(pageMentionValue):
                 return pageMentionValue.id.description
-            case .database(let databaseMentionValue):
+            case let .database(databaseMentionValue):
                 return databaseMentionValue.id.description
-            case .date(let dateRange):
+            case let .date(dateRange):
                 return [
                     dateRange.start.dateString,
                     dateRange.end?.dateString,
                 ]
-                    .compactMap({ $0 })
-                    .joined(separator: "...")
+                .compactMap { $0 }
+                .joined(separator: "...")
             case .unknown:
                 return ""
             }

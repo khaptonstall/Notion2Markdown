@@ -1,17 +1,11 @@
-//
-//  BlockChildrenTests.swift
-//
-//
-//  Created by Kyle Haptonstall on 4/10/24.
-//
+// Copyright © 2024 Kyle Haptonstall. All rights reserved.
 
 import Foundation
-import NotionSwift
 @testable import notion2markdown
+import NotionSwift
 import XCTest
 
 class BlockChildrenTests: XCTestCase {
-
     func testBlockChildrenPagination() async throws {
         // Setup a mock client and prepare multiple expected block responses
         let client = MockNotionClient()
@@ -36,5 +30,4 @@ class BlockChildrenTests: XCTestCase {
         let expectedBlockIds = blocks.map { $0.id }.prefix(3)
         XCTAssertEqual(response.map { $0.id }, Array(expectedBlockIds))
     }
-
 }

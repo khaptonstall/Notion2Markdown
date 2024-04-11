@@ -1,9 +1,4 @@
-//
-//  NotionClient+Async.swift
-//  
-//
-//  Created by Kyle Haptonstall on 4/5/24.
-//
+// Copyright © 2024 Kyle Haptonstall. All rights reserved.
 
 import Foundation
 import NotionSwift
@@ -31,4 +26,3 @@ extension NotionClientType {
         }
     }
 }
-

@@ -1,0 +1,39 @@
+# SwiftFormat Rules Directory: https://github.com/nicklockwood/SwiftFormat/blob/master/Rules.md
+
+#----------------#
+# Opt-In Rules   #
+#----------------#
+
+--wraparguments before-first
+
+#--------------------#
+# Rule Configuration #
+#--------------------#
+
+# Only strips unused arguments (replacing with _) in closures, not methods.
+--stripunusedargs closure-only
+
+# Only use explicit self inside initializers
+--self init-only
+
+# sets the header block to supplied text
+--header "Copyright © {year} Kyle Haptonstall. All rights reserved."
+
+#----------------#
+# Disabled Rules #
+#----------------#
+
+# Convert trivial "map { $0.foo }" closures to keyPath-based syntax.
+# Disabled for false positive matches creating breaking changes.
+--disable preferKeyPath
+
+# Wrap the opening brace of multiline statements.
+# Disabled because this rule is non-configurable.
+--disable wrapMultilineStatementBraces
+
+#-----------------#
+# File Exclusions #
+#-----------------#
+
+--exclude */Package.swift # Exclude SPM manifest files
+--exclude Pods # Exclude dependencies

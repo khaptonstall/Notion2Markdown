@@ -1,9 +1,4 @@
-//
-//  ReadBlock+Mocked.swift
-//
-//
-//  Created by Kyle Haptonstall on 4/10/24.
-//
+// Copyright © 2024 Kyle Haptonstall. All rights reserved.
 
 import Foundation
 import NotionSwift
@@ -31,5 +26,3 @@ extension ReadBlock {
         )
     }
 }
-
-

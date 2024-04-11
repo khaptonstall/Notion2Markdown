@@ -1,9 +1,4 @@
-//
-//  RichTextContainer.swift
-//
-//
-//  Created by Kyle Haptonstall on 4/6/24.
-//
+// Copyright © 2024 Kyle Haptonstall. All rights reserved.
 
 import Foundation
 import NotionSwift
@@ -18,7 +13,7 @@ protocol RichTextContainer {
 extension RichTextContainer {
     /// Converts the `richText` array into a single markdown string with all styling applied.
     var asMarkdown: String {
-        richText.map({ $0.asMarkdown }).joined()
+        richText.map { $0.asMarkdown }.joined()
     }
 }
 
