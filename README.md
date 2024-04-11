@@ -20,7 +20,7 @@ Notion2Markdown supports converting the following Notion Block types:
 For a full list of Notion block types, visit their [API Documentation.](https://developers.notion.com/reference/block#block-type-objects)
 
 > [!IMPORTANT]  
-> Retrieving child blocks are currently unsupported.
+> notion2markdown does not currently support fetching nested  child blocks
 
 ## Prerequisites
 
