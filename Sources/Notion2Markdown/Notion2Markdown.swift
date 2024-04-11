@@ -22,7 +22,7 @@ struct Notion2Markdown: AsyncParsableCommand {
     var databaseID: String
 
     @Option(help: "The directory to output the markdown file")
-    var outputDirectory: String?
+    var outputDirectory: String = "./"
 
     // MARK: Command
 
@@ -38,14 +38,10 @@ struct Notion2Markdown: AsyncParsableCommand {
         // Convert to markdown
         let markdown = try await convertPageToMarkdown(page, pageTitle: pageTitle, notionClient: client)
 
-        // Either print to the console, or save to the provided output directory
-        if let outputDirectory {
-            let outputURL = URL(fileURLWithPath: outputDirectory, isDirectory: true)
-                .appending(path: "\(pageTitle.replacingOccurrences(of: " ", with: "-")).md")
-            try markdown.write(to: outputURL, atomically: true, encoding: .utf8)
-        } else {
-            print(markdown)
-        }
+        // Save the markdown to a file
+        let outputURL = URL(fileURLWithPath: outputDirectory, isDirectory: true)
+            .appending(path: "\(pageTitle.replacingOccurrences(of: " ", with: "-")).md")
+        try markdown.write(to: outputURL, atomically: true, encoding: .utf8)
     }
 
     // MARK: Private API
