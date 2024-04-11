@@ -20,7 +20,7 @@ Notion2Markdown supports converting the following Notion Block types:
 For a full list of Notion block types, visit their [API Documentation.](https://developers.notion.com/reference/block#block-type-objects)
 
 > [!IMPORTANT]  
-> Pagination and retrieving child blocks are currently unsupported.
+> Retrieving child blocks are currently unsupported.
 
 ## Prerequisites
 
