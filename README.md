@@ -2,6 +2,11 @@
 
 Notion2Markdown is a Swift CLI tool used to query select Notion Databases and convert Pages within them to markdown.
 
+> [!WARNING]  
+> The code in this library has been made public as-is solely for the purposes of reference, education, discovery, and personal use. As such, stability for production applications CANNOT be guaranteed; however, if you're interested in leveraging code within this library in your own projects, feel free to do so at your own risk.
+> 
+> Please open GitHub issues for any problems you encounter or requests you have and we will do my best to provide support.
+
 ## Features
 Notion2Markdown supports converting the following Notion Block types:
 - [x] Bookmark
