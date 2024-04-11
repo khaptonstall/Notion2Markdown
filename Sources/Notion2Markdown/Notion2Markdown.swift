@@ -81,7 +81,7 @@ struct Notion2Markdown: AsyncParsableCommand {
 
     private func convertPageToMarkdown(_ page: Page, pageTitle: String, notionClient: NotionClient) async throws -> String {
         // Retrieve the blocks from the page.
-        let blocks = try await notionClient.blockChildren(blockId: page.id.toBlockIdentifier)
+        let blocks = try await notionClient.allBlockChildren(blockId: page.id.toBlockIdentifier)
 
         var markdownBlocks: [String] = []
 
@@ -90,7 +90,7 @@ struct Notion2Markdown: AsyncParsableCommand {
 
         // Quick way to handle numbered lists -> just increment each time we encounter one, otherwise reset the value.
         var currentNumberedListIndex = 1
-        for block in blocks.results {
+        for block in blocks {
             switch block.type {
             case .numberedListItem:
                 markdownBlocks.append(block.type.asMarkdown.convertedToMarkdown(.numberedListItem(number: currentNumberedListIndex)))
