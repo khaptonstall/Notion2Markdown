@@ -47,9 +47,9 @@ extension MarkdownConverter {
     static func todo(checked: Bool) -> Self {
         .init { input in
             if checked == true {
-                return "- [x] \(input)"
+                "- [x] \(input)"
             } else {
-                return "- [ ] \(input)"
+                "- [ ] \(input)"
             }
         }
     }
