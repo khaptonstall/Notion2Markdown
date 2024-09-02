@@ -3,10 +3,10 @@
     {
       "identity" : "notionswift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/chojnac/NotionSwift",
+      "location" : "https://github.com/khaptonstall/NotionSwift",
       "state" : {
-        "revision" : "56c0c3a0dca35583aab0ef26fe2694e4c303bb72",
-        "version" : "0.8.0"
+        "branch" : "feature/support-status-filter",
+        "revision" : "d6983bb4526cbb75edd666d1487d8ac3ba578efc"
       }
     },
     {

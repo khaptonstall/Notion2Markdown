@@ -11,7 +11,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser.git", exact: "1.3.1"),
-        .package(url: "https://github.com/chojnac/NotionSwift", exact: "0.8.0"),
+        .package(url: "https://github.com/khaptonstall/NotionSwift", branch: "feature/support-status-filter"),
     ],
     targets: [
         .executableTarget(
