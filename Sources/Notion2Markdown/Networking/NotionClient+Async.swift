@@ -4,9 +4,9 @@ import Foundation
 import NotionSwift
 
 extension NotionClientType {
-    func databaseQuery(databaseId: Database.Identifier) async throws -> ListResponse<Page> {
+    func databaseQuery(databaseId: Database.Identifier, params: DatabaseQueryParams = .init()) async throws -> ListResponse<Page> {
         try await withCheckedThrowingContinuation { continuation in
-            databaseQuery(databaseId: databaseId) { result in
+            databaseQuery(databaseId: databaseId, params: params) { result in
                 continuation.resume(with: result)
             }
         }
