@@ -85,6 +85,24 @@ struct Notion2Markdown: AsyncParsableCommand {
             case .numberedListItem:
                 markdownBlocks.append(block.type.asMarkdown.convertedToMarkdown(.numberedListItem(number: currentNumberedListIndex)))
                 currentNumberedListIndex += 1
+            case .image(let fileBlockValue):
+                switch fileBlockValue.file {
+                case let .file(url, _):
+                    print("Image url: \(url)")
+                    let (downloadURL, response) = try await URLSession.shared.download(for: URLRequest(url: URL(string: url)!))
+
+                    let outputURL = URL(fileURLWithPath: outputDirectory)
+                        .appending(path: "images")
+                    try FileManager.default.createDirectory(at: outputURL, withIntermediateDirectories: true)
+
+
+                    try FileManager.default.moveItem(
+                        at: downloadURL,
+                        to: outputURL.appending(path: "\(UUID().uuidString).png")
+                    )
+                default:
+                    continue
+                }
             default:
                 if currentNumberedListIndex != 1 { currentNumberedListIndex = 1 }
                 markdownBlocks.append(block.type.asMarkdown)
