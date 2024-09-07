@@ -30,6 +30,16 @@ extension BlockType {
             return headingBlockValue.asMarkdown.convertedToMarkdown(.heading2)
         case let .heading3(headingBlockValue):
             return headingBlockValue.asMarkdown.convertedToMarkdown(.heading3)
+        case .image(let fileBlockValue):
+            print("⚠️ Proccessing image block type \(String(describing: self))")
+            switch fileBlockValue.file {
+            case .external(let url):
+                print("URL: \(url)")
+                return "![](\(url))"
+            default:
+                print("Unknown")
+                return ""
+            }
         case let .numberedListItem(textAndChildrenBlockValue):
             return textAndChildrenBlockValue.asMarkdown
         case let .paragraph(textAndChildrenBlockValue):
@@ -46,7 +56,6 @@ extension BlockType {
              .column,
              .columnList,
              .file,
-             .image,
              .linkToPage,
              .pdf,
              .syncedBlock,
