@@ -30,16 +30,6 @@ extension BlockType {
             return headingBlockValue.asMarkdown.convertedToMarkdown(.heading2)
         case let .heading3(headingBlockValue):
             return headingBlockValue.asMarkdown.convertedToMarkdown(.heading3)
-        case .image(let fileBlockValue):
-            print("⚠️ Proccessing image block type \(String(describing: self))")
-            switch fileBlockValue.file {
-            case .external(let url):
-                print("URL: \(url)")
-                return "![](\(url))"
-            default:
-                print("Unknown")
-                return ""
-            }
         case let .numberedListItem(textAndChildrenBlockValue):
             return textAndChildrenBlockValue.asMarkdown
         case let .paragraph(textAndChildrenBlockValue):
@@ -56,6 +46,7 @@ extension BlockType {
              .column,
              .columnList,
              .file,
+             .image,
              .linkToPage,
              .pdf,
              .syncedBlock,
@@ -67,6 +58,33 @@ extension BlockType {
              .unsupported,
              .video:
             print("⚠️ Skipping unsupported block type \(String(describing: self))")
+            return ""
+        }
+    }
+}
+
+extension BlockType.FileBlockValue {
+    func asMarkdownImage(parentDirectory: String) async throws -> String {
+        switch self.file {
+        case let .external(urlString),
+            let .file(urlString, _):
+            guard let url = URL(string: urlString), !url.pathExtension.isEmpty else {
+                throw Notion2MarkdownError.invalidFileURL
+            }
+
+            let (downloadURL, _) = try await URLSession.shared.download(for: URLRequest(url: url))
+
+            let outputURL = URL(fileURLWithPath: parentDirectory).appending(path: "images")
+            try FileManager.default.createDirectory(at: outputURL, withIntermediateDirectories: true)
+
+            let fileName = "\(UUID().uuidString).\(url.pathExtension)"
+            try FileManager.default.moveItem(
+                at: downloadURL,
+                to: outputURL.appending(path: fileName)
+            )
+
+            return "![](images/\(fileName)"
+        case .unknown:
             return ""
         }
     }
