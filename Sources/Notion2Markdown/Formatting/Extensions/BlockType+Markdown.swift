@@ -64,6 +64,8 @@ extension BlockType {
 }
 
 extension BlockType.FileBlockValue {
+    /// Downloads the associated image file and produces a markdown string using a relative link to the downloaded image.
+    /// - Parameter parentDirectory: The directory that will be the parent to the images subdirectory.
     func asMarkdownImage(parentDirectory: String) async throws -> String {
         switch self.file {
         case let .external(urlString),

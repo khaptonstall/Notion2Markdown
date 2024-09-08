@@ -17,6 +17,7 @@ Notion2Markdown supports converting the following Notion Block types:
 - [x] Embed
 - [x] Equation 
 - [x] Headings
+- [x] Images
 - [x] Numbered list item
 - [x] Paragraph
 - [x] Quote
