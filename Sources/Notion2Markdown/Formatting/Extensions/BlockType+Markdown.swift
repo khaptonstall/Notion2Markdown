@@ -83,7 +83,7 @@ extension BlockType.FileBlockValue {
                 to: outputURL.appending(path: fileName)
             )
 
-            return "![](images/\(fileName)"
+            return "![](images/\(fileName))"
         case .unknown:
             return ""
         }
