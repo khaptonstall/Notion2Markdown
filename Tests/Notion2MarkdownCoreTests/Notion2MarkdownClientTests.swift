@@ -6,62 +6,95 @@
 //
 
 import Foundation
-@testable import Notion2Markdown
+@testable import Notion2MarkdownCore
+import NotionSwift
 import XCTest
 
 final class Notion2MarkdownClientTests: XCTestCase {
-    func testNumberedListMarkdownConversion() async throws {
-//        let mockNotionClient = MockNotionClient()
-//        let client = Notion2MarkdownClient(internalClient: mockNotionClient)
-//
-//        mockNotionClient.blockChildrenResponses = [.success(.init(results: MockData.numberedListBlocks, nextCursor: nil, hasMore: false))]
-//
-//        let markdown = try await client.convertPageToMarkdown(.mocked())
-//        print(markdown)
-//        XCTAssertEqual(markdown, MockData.numberedListMarkdown)
+    func testMarkdownConversion_numberedLists_startsNewListAfterAlternateBlockType() async throws {
+        try await assertConversionOfBlocks(
+            MockData.numberedListBlocks,
+            matchesMarkdown: MockData.numberedListMarkdown
+        )
+    }
+
+    func testMarkdownConversion_bulletedListItem() async throws {
+        try await assertConversionOfBlocks(
+            MockData.bulletedListItemBlocks,
+            matchesMarkdown: MockData.bulletedListItemMarkdown
+        )
+    }
+
+    func testMarkdownConversion_callouts() async throws {
+        try await assertConversionOfBlocks(
+            MockData.calloutBlocks,
+            matchesMarkdown: MockData.calloutMarkdown
+        )
+    }
+
+    func testMarkdownConversion_code() async throws {
+        try await assertConversionOfBlocks(
+            MockData.codeBlocks,
+            matchesMarkdown: MockData.codeMarkdown
+        )
+    }
+
+    func testMarkdownConversion_embed() async throws {
+        try await assertConversionOfBlocks(
+            MockData.embedBlocks,
+            matchesMarkdown: MockData.embedMarkdown
+        )
+    }
+
+    func testMarkdownConversion_headings() async throws {
+        try await assertConversionOfBlocks(
+            MockData.headingBlocks,
+            matchesMarkdown: MockData.headingMarkdown
+        )
+    }
+
+    func testMarkdownConversion_quotes() async throws {
+        try await assertConversionOfBlocks(
+            MockData.quoteBlocks,
+            matchesMarkdown: MockData.quoteMarkdown
+        )
+    }
+
+    func testMarkdownConversion_todos() async throws {
+        try await assertConversionOfBlocks(
+            MockData.todoBlocks,
+            matchesMarkdown: MockData.todoMarkdown
+        )
+    }
+
+    func testErrors_pageMissingTitle() async throws {
+        let mockNotionClient = MockNotionClient()
+        let client = Notion2MarkdownClient(internalClient: mockNotionClient)
+
+        do {
+            _ = try await client.convertPageToMarkdown(.mocked())
+            XCTFail("Expected error thrown due to page missing a title")
+        } catch let error as Notion2MarkdownError {
+            XCTAssertEqual(error, .pageMissingTitle)
+        } catch {
+            XCTFail("Expected to receive Notion2MarkdownError.pageMissingTitle but got \(error)")
+        }
     }
 }
 
-//enum MockData {
-//    static let numberedListBlocks: [ReadBlock] = [
-//        .mocked(type: .numberedListItem([.mocked(string: "Item 1")])),
-//        .mocked(type: .numberedListItem([.mocked(string: "Item 2")])),
-//        .mocked(type: .paragraph([.mocked(string: "Paragraph")])),
-//        .mocked(type: .numberedListItem([.mocked(string: "Item 1")])),
-//        .mocked(type: .numberedListItem([.mocked(string: "Item 2")])),
-//    ]
-//    static let numberedListMarkdown = """
-//"""
-//}
+// MARK: - Utilities
 
-import NotionSwift
+private extension Notion2MarkdownClientTests {
+    func assertConversionOfBlocks(
+        _ blocks: [ReadBlock],
+        matchesMarkdown expectedMarkdown: String
+    ) async throws {
+        let mockNotionClient = MockNotionClient()
+        let client = Notion2MarkdownClient(internalClient: mockNotionClient)
 
-//extension Page {
-//    static func mocked(
-//        id: String = UUID().uuidString,
-//        createdTime: Date = .now,
-//        lastEditedTime: Date = .now,
-//        createdBy: PartialUser = .mocked(),
-//        lastEditedBy: PartialUser = .mocked(),
-//        icon: IconFile? = nil,
-//        cover: CoverFile? = nil,
-//        parent: PageParentType = .unknown(typeName: ""),
-//        archived: Bool = false,
-//        properties: [PropertyName: PageProperty] = [:],
-//        url: URL = .init(string: "https://www.notion.so/")!
-//    ) -> Page {
-//        self.init(
-//            id: .init(id),
-//            createdTime: createdTime,
-//            lastEditedTime: lastEditedTime,
-//            createdBy: createdBy,
-//            lastEditedBy: lastEditedBy,
-//            icon: icon,
-//            cover: cover,
-//            parent: parent,
-//            archived: archived,
-//            properties: properties,
-//            url: url
-//        )
-//    }
-//}
+        mockNotionClient.blockChildrenResponses = [.success(.init(results: blocks, nextCursor: nil, hasMore: false))]
+
+        let actualMarkdown = try await client.convertPageToMarkdown(.titledPage(MockData.pageTitle))
+        XCTAssertEqual(actualMarkdown, expectedMarkdown)
+    }
+}

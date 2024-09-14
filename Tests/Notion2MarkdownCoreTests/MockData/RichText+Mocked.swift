@@ -11,3 +11,11 @@ extension RichText {
         .init(string: string, annotations: annotations)
     }
 }
+
+extension RichText.Annotations {
+    static let bold: Self = .init(bold: true)
+    static let italic: Self = .init(italic: true)
+    static let strikethrough: Self = .init(strikethrough: true)
+    static let underline: Self = .init(underline: true)
+    static let code: Self = .init(code: true)
+}
