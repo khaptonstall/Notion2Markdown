@@ -48,11 +48,13 @@ public struct Notion2MarkdownClient {
         for block in blocks {
             switch block.type {
             case .numberedListItem:
-                markdownBlocks.append(block.type.asMarkdown.convertedToMarkdown(.numberedListItem(number: currentNumberedListIndex)))
+                guard let blockMarkdown = block.type.asMarkdown else { continue }
+                markdownBlocks.append(blockMarkdown.convertedToMarkdown(.numberedListItem(number: currentNumberedListIndex)))
                 currentNumberedListIndex += 1
             default:
                 if currentNumberedListIndex != 1 { currentNumberedListIndex = 1 }
-                markdownBlocks.append(block.type.asMarkdown)
+                guard let blockMarkdown = block.type.asMarkdown else { continue }
+                markdownBlocks.append(blockMarkdown)
             }
         }
 
