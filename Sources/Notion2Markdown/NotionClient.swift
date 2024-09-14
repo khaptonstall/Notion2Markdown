@@ -12,7 +12,9 @@ public struct Notion2MarkdownClient {
     // MARK: Initialization
 
     public init(notionToken: String, databaseID: String) {
-        self.internalClient = NotionSwift.NotionClient(accessKeyProvider: StringAccessKeyProvider(accessKey: notionToken))
+        self.internalClient = NotionSwift.NotionClient(
+            accessKeyProvider: StringAccessKeyProvider(accessKey: notionToken)
+        )
         self.databaseID = databaseID
     }
 
