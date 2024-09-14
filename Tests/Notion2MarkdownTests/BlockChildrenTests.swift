@@ -1,7 +1,7 @@
 // Copyright © 2024 Kyle Haptonstall. All rights reserved.
 
 import Foundation
-@testable import notion2markdown
+@testable import Notion2Markdown
 import NotionSwift
 import XCTest
 
