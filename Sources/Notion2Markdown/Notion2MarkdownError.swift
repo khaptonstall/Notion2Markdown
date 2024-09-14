@@ -2,7 +2,7 @@
 
 import Foundation
 
-enum Notion2MarkdownError: Error {
+public enum Notion2MarkdownError: LocalizedError {
     /// Occurs when providing invalid input (e.g. anything but an integer) when prompted to select a page to publish
     case invalidPageSelectionInput
 
@@ -10,10 +10,8 @@ enum Notion2MarkdownError: Error {
     case invalidPageSelectionIndex
 
     case pageMissingTitle
-}
 
-extension Notion2MarkdownError: LocalizedError {
-    var errorDescription: String? {
+    public var errorDescription: String? {
         switch self {
         case .invalidPageSelectionInput:
             "Please enter a valid integer index."
