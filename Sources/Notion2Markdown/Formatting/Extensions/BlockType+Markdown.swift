@@ -4,8 +4,8 @@ import Foundation
 import NotionSwift
 
 extension BlockType {
-    /// Attempts converting the **top-level** block to its markdown equivalent.
-    var asMarkdown: String {
+    /// Attempts converting the block to its markdown equivalent.
+    var asMarkdown: String? {
         switch self {
         case let .bookmark(value):
             return value.asMarkdown
@@ -39,12 +39,14 @@ extension BlockType {
         case let .toDo(toDoBlockValue):
             return toDoBlockValue.asMarkdown
                 .convertedToMarkdown(.todo(checked: toDoBlockValue.checked ?? false))
+        case .column, .columnList:
+            // ColumnList and Column aren't converted directly to markdown,
+            // however the Column children will be converted (given the child BlockType is supported).
+            return nil
         case .audio,
              .breadcrumb,
              .childDatabase,
              .childPage,
-             .column,
-             .columnList,
              .file,
              .image,
              .linkToPage,
@@ -58,7 +60,7 @@ extension BlockType {
              .unsupported,
              .video:
             print("⚠️ Skipping unsupported block type \(String(describing: self))")
-            return ""
+            return nil
         }
     }
 }
