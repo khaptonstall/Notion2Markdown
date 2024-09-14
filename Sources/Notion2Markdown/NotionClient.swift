@@ -1,15 +1,9 @@
-//
-//  File.swift
-//  
-//
-//  Created by Kyle Haptonstall on 9/2/24.
-//
+// Copyright © 2024 Kyle Haptonstall. All rights reserved.
 
 import Foundation
 import NotionSwift
 
 public struct Notion2MarkdownClient {
-
     // MARK: Properties
 
     private let databaseID: String
@@ -26,7 +20,7 @@ public struct Notion2MarkdownClient {
 
     /// Enumerates a list of pages within the database.
     public func enumerateDatabasePages(params: DatabaseQueryParams = .init()) async throws -> [Page] {
-        return try await internalClient.databaseQuery(
+        try await internalClient.databaseQuery(
             databaseId: .init(databaseID),
             params: params
         ).results
