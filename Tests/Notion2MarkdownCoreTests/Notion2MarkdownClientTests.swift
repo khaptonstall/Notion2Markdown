@@ -1,9 +1,4 @@
-//
-//  File.swift
-//  
-//
-//  Created by Kyle Haptonstall on 9/14/24.
-//
+// Copyright © 2024 Kyle Haptonstall. All rights reserved.
 
 import Foundation
 @testable import Notion2MarkdownCore

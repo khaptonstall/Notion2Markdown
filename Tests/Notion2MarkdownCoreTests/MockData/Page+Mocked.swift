@@ -1,9 +1,4 @@
-//
-//  File.swift
-//  
-//
-//  Created by Kyle Haptonstall on 9/14/24.
-//
+// Copyright © 2024 Kyle Haptonstall. All rights reserved.
 
 import Foundation
 import NotionSwift
@@ -38,12 +33,12 @@ extension Page {
     }
 
     static func titledPage(_ title: String) -> Page {
-        self.mocked(
+        mocked(
             properties: [
                 "Title": .mocked(
                     type: .title([.init(plainText: title, type: .text(.init(content: title)))])
-                )]
+                ),
+            ]
         )
     }
 }
-

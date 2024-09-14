@@ -1,15 +1,9 @@
-//
-//  File.swift
-//  
-//
-//  Created by Kyle Haptonstall on 9/14/24.
-//
+// Copyright © 2024 Kyle Haptonstall. All rights reserved.
 
 import Foundation
 import NotionSwift
 
 enum MockData {
-
     static let pageTitle = "Testing"
 
     // MARK: Numbered Lists
@@ -23,18 +17,18 @@ enum MockData {
     ]
 
     static let numberedListMarkdown: String = """
-# \(pageTitle)
+    # \(pageTitle)
 
-1. Item 1
+    1. Item 1
 
-2. Item 2
+    2. Item 2
 
-Paragraph
+    Paragraph
 
-1. Item 1
+    1. Item 1
 
-2. Item 2
-"""
+    2. Item 2
+    """
 
     // MARK: Bulleted List Item
 
@@ -42,24 +36,23 @@ Paragraph
         .mocked(type: .bulletedListItem([.mocked(string: "Plaintext list item")])),
         .mocked(type: .bulletedListItem([.mocked(string: "Bold list item", annotations: .bold)])),
         .mocked(type: .bulletedListItem([.mocked(string: "Italic list item", annotations: .italic)])),
-        .mocked(type: .bulletedListItem([.mocked(string: "Strikethrough list item", annotations:.strikethrough)])),
+        .mocked(type: .bulletedListItem([.mocked(string: "Strikethrough list item", annotations: .strikethrough)])),
         .mocked(type: .bulletedListItem([.mocked(string: "Code list item", annotations: .code)])),
     ]
 
     static let bulletedListItemMarkdown: String = """
-# \(pageTitle)
+    # \(pageTitle)
 
-- Plaintext list item
+    - Plaintext list item
 
-- **Bold list item**
+    - **Bold list item**
 
-- *Italic list item*
+    - *Italic list item*
 
-- ~~Strikethrough list item~~
+    - ~~Strikethrough list item~~
 
-- `Code list item`
-"""
-
+    - `Code list item`
+    """
 
     // MARK: Callouts
 
@@ -67,23 +60,23 @@ Paragraph
         .mocked(type: .callout([.mocked(string: "Plaintext callout")])),
         .mocked(type: .callout([.mocked(string: "Bold callout", annotations: .bold)])),
         .mocked(type: .callout([.mocked(string: "Italic callout", annotations: .italic)])),
-        .mocked(type: .callout([.mocked(string: "Strikethrough callout", annotations:.strikethrough)])),
+        .mocked(type: .callout([.mocked(string: "Strikethrough callout", annotations: .strikethrough)])),
         .mocked(type: .callout([.mocked(string: "Code callout", annotations: .code)])),
     ]
 
     static let calloutMarkdown: String = """
-# \(pageTitle)
+    # \(pageTitle)
 
-> Plaintext callout
+    > Plaintext callout
 
-> **Bold callout**
+    > **Bold callout**
 
-> *Italic callout*
+    > *Italic callout*
 
-> ~~Strikethrough callout~~
+    > ~~Strikethrough callout~~
 
-> `Code callout`
-"""
+    > `Code callout`
+    """
 
     // MARK: Code
 
@@ -93,16 +86,16 @@ Paragraph
     ]
 
     static let codeMarkdown: String = """
-# \(pageTitle)
+    # \(pageTitle)
 
-```Swift
-let foo = "bar"
-```
+    ```Swift
+    let foo = "bar"
+    ```
 
-```
-No language defined
-```
-"""
+    ```
+    No language defined
+    ```
+    """
 
     // MARK: Embed
 
@@ -112,12 +105,12 @@ No language defined
     ]
 
     static let embedMarkdown: String = """
-# \(pageTitle)
+    # \(pageTitle)
 
-[](nocaption.com)
+    [](nocaption.com)
 
-[This is a link caption](caption.com)
-"""
+    [This is a link caption](caption.com)
+    """
 
     // MARK: Headings
 
@@ -128,14 +121,14 @@ No language defined
     ]
 
     static let headingMarkdown: String = """
-# \(pageTitle)
+    # \(pageTitle)
 
-# Heading 1
+    # Heading 1
 
-## Heading 2
+    ## Heading 2
 
-### Heading 3
-"""
+    ### Heading 3
+    """
 
     // MARK: Quotes
 
@@ -143,37 +136,36 @@ No language defined
         .mocked(type: .quote([.mocked(string: "Plaintext quote")])),
         .mocked(type: .quote([.mocked(string: "Bold quote", annotations: .bold)])),
         .mocked(type: .quote([.mocked(string: "Italic quote", annotations: .italic)])),
-        .mocked(type: .quote([.mocked(string: "Strikethrough quote", annotations:.strikethrough)])),
+        .mocked(type: .quote([.mocked(string: "Strikethrough quote", annotations: .strikethrough)])),
         .mocked(type: .quote([.mocked(string: "Code quote", annotations: .code)])),
     ]
 
     static let quoteMarkdown: String = """
-# \(pageTitle)
+    # \(pageTitle)
 
-> Plaintext quote
+    > Plaintext quote
 
-> **Bold quote**
+    > **Bold quote**
 
-> *Italic quote*
+    > *Italic quote*
 
-> ~~Strikethrough quote~~
+    > ~~Strikethrough quote~~
 
-> `Code quote`
-"""
+    > `Code quote`
+    """
 
     // MARK: Todos
 
     static let todoBlocks: [ReadBlock] = [
         .mocked(type: .toDo([.mocked(string: "Checked")], checked: true)),
         .mocked(type: .toDo([.mocked(string: "Unchecked")], checked: false)),
-
     ]
 
     static let todoMarkdown: String = """
-# \(pageTitle)
+    # \(pageTitle)
 
-- [x] Checked
+    - [x] Checked
 
-- [ ] Unchecked
-"""
+    - [ ] Unchecked
+    """
 }
