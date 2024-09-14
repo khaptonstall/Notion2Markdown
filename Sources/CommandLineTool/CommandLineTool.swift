@@ -2,7 +2,7 @@
 
 import ArgumentParser
 import Foundation
-import Notion2Markdown
+import Notion2MarkdownCore
 import NotionSwift
 
 @main
@@ -28,7 +28,7 @@ struct CommandLineTool: AsyncParsableCommand {
     // MARK: Command
 
     mutating func run() async throws {
-        let client = Notion2MarkdownClient(notionToken: notionToken, databaseID: databaseID)
+        let client = Notion2MarkdownClient(notionToken: notionToken)
 
         // Select a Page
         let page = try await selectPageToPublish(notionClient: client)
@@ -50,7 +50,7 @@ struct CommandLineTool: AsyncParsableCommand {
     /// Displays a list of publishable pages and prompts the user to select one.
     /// - Returns: The `Page` the user selected.
     private func selectPageToPublish(notionClient: Notion2MarkdownClient) async throws -> Page {
-        let response = try await notionClient.enumerateDatabasePages()
+        let response = try await notionClient.enumerateDatabasePages(databaseID: databaseID)
 
         print("Select a page you'd like to publish (enter the page index):")
         for (index, page) in response.enumerated() {

@@ -6,22 +6,28 @@ import NotionSwift
 public struct Notion2MarkdownClient {
     // MARK: Properties
 
-    private let databaseID: String
-    private let internalClient: NotionClient
+    private let internalClient: NotionClientType
 
     // MARK: Initialization
 
-    public init(notionToken: String, databaseID: String) {
-        self.internalClient = NotionSwift.NotionClient(
+    public init(notionToken: String) {
+        let client = NotionSwift.NotionClient(
             accessKeyProvider: StringAccessKeyProvider(accessKey: notionToken)
         )
-        self.databaseID = databaseID
+        self.init(internalClient: client)
+    }
+
+    init(internalClient: any NotionClientType) {
+        self.internalClient = internalClient
     }
 
     // MARK: Database Query
 
     /// Enumerates a list of pages within the database.
-    public func enumerateDatabasePages(params: DatabaseQueryParams = .init()) async throws -> [Page] {
+    public func enumerateDatabasePages(
+        databaseID: String,
+        params: DatabaseQueryParams = .init()
+    ) async throws -> [Page] {
         try await internalClient.databaseQuery(
             databaseId: .init(databaseID),
             params: params
