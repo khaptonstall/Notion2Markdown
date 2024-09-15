@@ -5,4 +5,5 @@ import Foundation
 extension String {
     static let newline = "\n"
     static let doubleNewline = "\n\n"
+    static let indent = "    "
 }

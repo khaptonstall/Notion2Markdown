@@ -51,16 +51,26 @@ public struct Notion2MarkdownClient {
 
         // Quick way to handle numbered lists -> just increment each time we encounter one, otherwise reset the value.
         var currentNumberedListIndex = 1
+        var currentIndent = ""
         for block in blocks {
             switch block.type {
             case .numberedListItem:
-                guard let blockMarkdown = block.type.asMarkdown else { continue }
-                markdownBlocks.append(blockMarkdown.convertedToMarkdown(.numberedListItem(number: currentNumberedListIndex)))
+                guard let blockMarkdown = block.type.asMarkdown else { break }
+                let convertedMarkdown = blockMarkdown.convertedToMarkdown(.numberedListItem(number: currentNumberedListIndex))
+                markdownBlocks.append("\(currentIndent)\(convertedMarkdown)")
                 currentNumberedListIndex += 1
             default:
                 if currentNumberedListIndex != 1 { currentNumberedListIndex = 1 }
-                guard let blockMarkdown = block.type.asMarkdown else { continue }
-                markdownBlocks.append(blockMarkdown)
+                guard let blockMarkdown = block.type.asMarkdown else { break }
+                markdownBlocks.append("\(currentIndent)\(blockMarkdown)")
+            }
+
+            if block.hasChildren {
+                // The next iteration will be a child element, so indent the content
+                currentIndent += .indent
+            } else {
+                // If there are no children to follow, reset the indent
+                currentIndent = ""
             }
         }
 
