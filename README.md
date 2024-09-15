@@ -13,6 +13,7 @@ Notion2Markdown supports converting the following Notion Block types:
 - [x] Bulleted list item
 - [x] Callout
 - [x] Code
+- [x] Columns
 - [x] Divider
 - [x] Embed
 - [x] Equation 
@@ -23,9 +24,6 @@ Notion2Markdown supports converting the following Notion Block types:
 - [x] Todo
 
 For a full list of Notion block types, visit their [API Documentation.](https://developers.notion.com/reference/block#block-type-objects)
-
-> [!IMPORTANT]  
-> notion2markdown does not currently support fetching nested child blocks
 
 ## Prerequisites
 
@@ -58,7 +56,16 @@ khaptonstall/notion2markdown@0.1.0
 
 Add the following to your `Package.swift` dependencies:
 ```swift
-.package(url: "https://github.com/khaptonstall/Notion2Markdown", branch: "main"),
+// In your dependencies array:
+.package(url: "https://github.com/khaptonstall/Notion2Markdown", branch: "main")
+
+// In the desired target or executable:
+.executableTarget(
+    name: "MyExecutableTarget",
+    dependencies: [
+        .product(name: "Notion2MarkdownCore", package: "Notion2Markdown"),
+    ]
+)
 ```
 
 ## CLI Usage

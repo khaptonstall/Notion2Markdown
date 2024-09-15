@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "346BC614-6009-4CFF-B6CE-7EF7D8A4010A",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "Notion2MarkdownCoreTests",
+        "name" : "Notion2MarkdownCoreTests"
+      }
+    }
+  ],
+  "version" : 1
+}
