@@ -56,7 +56,16 @@ khaptonstall/notion2markdown@0.1.0
 
 Add the following to your `Package.swift` dependencies:
 ```swift
-.package(url: "https://github.com/khaptonstall/Notion2Markdown", branch: "main"),
+// In your dependencies array:
+.package(url: "https://github.com/khaptonstall/Notion2Markdown", branch: "main")
+
+// In the desired target or executable:
+.executableTarget(
+    name: "MyExecutableTarget",
+    dependencies: [
+        .product(name: "Notion2MarkdownCore", package: "Notion2Markdown"),
+    ]
+)
 ```
 
 ## CLI Usage
