@@ -26,7 +26,16 @@ extension NotionClientType {
         )
 
         var latestBlocks = blocks
-        latestBlocks.append(contentsOf: response.results)
+        for block in response.results {
+            // Add the current block to the list
+            latestBlocks.append(block)
+
+            // If the block has children, recursively fetch them
+            if block.hasChildren {
+                let childBlocks = try await allBlockChildren(blockId: block.id)
+                latestBlocks.append(contentsOf: childBlocks)
+            }
+        }
 
         return try await allBlockChildren(
             blockId: blockId,

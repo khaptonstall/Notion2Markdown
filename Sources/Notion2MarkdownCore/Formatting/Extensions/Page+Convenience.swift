@@ -3,7 +3,7 @@
 import Foundation
 import NotionSwift
 
-extension Page {
+public extension Page {
     var plainTextTitle: String? {
         getTitle()?.compactMap { $0.plainText }.joined(separator: " ")
     }

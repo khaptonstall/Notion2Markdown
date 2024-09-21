@@ -6,7 +6,8 @@ let package = Package(
     name: "Notion2Markdown",
     platforms: [.macOS(.v13)],
     products: [
-        .executable(name: "notion2markdown", targets: ["notion2markdown"]),
+        .executable(name: "notion2markdown", targets: ["CommandLineTool"]),
+        .library(name: "Notion2MarkdownCore", targets: ["Notion2MarkdownCore"]),
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser.git", exact: "1.3.1"),
@@ -14,15 +15,21 @@ let package = Package(
     ],
     targets: [
         .executableTarget(
-            name: "notion2markdown",
+            name: "CommandLineTool",
             dependencies: [
+                "Notion2MarkdownCore",
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
+            ]
+        ),
+        .target(
+            name: "Notion2MarkdownCore",
+            dependencies: [
                 .product(name: "NotionSwift", package: "NotionSwift"),
             ]
         ),
         .testTarget(
-            name: "Notion2MarkdownTests",
-            dependencies: ["notion2markdown"]
+            name: "Notion2MarkdownCoreTests",
+            dependencies: ["Notion2MarkdownCore"]
         ),
     ]
 )

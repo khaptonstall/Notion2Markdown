@@ -1,6 +1,6 @@
 # Notion2Markdown
 
-Notion2Markdown is a Swift CLI tool used to query select Notion Databases and convert Pages within them to markdown.
+Notion2Markdown is a Swift tool used to query select Notion Databases and convert Pages within them to markdown.
 
 > [!WARNING]  
 > The code in this library has been made public as-is solely for the purposes of reference, education, discovery, and personal use. As such, stability for production applications CANNOT be guaranteed; however, if you're interested in leveraging code within this library in your own projects, feel free to do so at your own risk.
@@ -13,6 +13,7 @@ Notion2Markdown supports converting the following Notion Block types:
 - [x] Bulleted list item
 - [x] Callout
 - [x] Code
+- [x] Columns
 - [x] Divider
 - [x] Embed
 - [x] Equation 
@@ -24,9 +25,6 @@ Notion2Markdown supports converting the following Notion Block types:
 - [x] Todo
 
 For a full list of Notion block types, visit their [API Documentation.](https://developers.notion.com/reference/block#block-type-objects)
-
-> [!IMPORTANT]  
-> notion2markdown does not currently support fetching nested child blocks
 
 ## Prerequisites
 
@@ -42,7 +40,7 @@ Back in the Notion app, go to your Database, select the ⋯ button in the top-ri
 
 ## Installation
 
-### [Mint](https://github.com/yonaskolb/mint)
+### CLI via [Mint](https://github.com/yonaskolb/mint)
 To install `notion2markdown` and link it globally:
 ```bash
 mint install khaptonstall/notion2markdown
@@ -55,7 +53,23 @@ In your Mintfile:
 khaptonstall/notion2markdown@0.1.0
 ```
 
-## Usage
+### Swift Package Manager
+
+Add the following to your `Package.swift` dependencies:
+```swift
+// In your dependencies array:
+.package(url: "https://github.com/khaptonstall/Notion2Markdown", branch: "main")
+
+// In the desired target or executable:
+.executableTarget(
+    name: "MyExecutableTarget",
+    dependencies: [
+        .product(name: "Notion2MarkdownCore", package: "Notion2Markdown"),
+    ]
+)
+```
+
+## CLI Usage
 To use `notion2markdown`, you'll need both your Notion Integration token and the identifier of the Database you wish to search in. (See [Notion documentation](https://developers.notion.com/reference/retrieve-a-database) on how to find your Database ID.) Then you can run the following command:
 ```bash
 mint run notion2markdown \
