@@ -19,9 +19,11 @@ public struct Notion2MarkdownClient {
         self.init(internalClient: client)
     }
 
-    init(internalClient: NotionClientType,
-         fileManager: FileManaging = FileManager.default,
-         fileDownloader: FileDownloading = URLSession.shared) {
+    init(
+        internalClient: NotionClientType,
+        fileManager: FileManaging = FileManager.default,
+        fileDownloader: FileDownloading = URLSession.shared
+    ) {
         self.internalClient = internalClient
         self.fileManager = fileManager
         self.fileDownloader = fileDownloader
@@ -52,7 +54,7 @@ public struct Notion2MarkdownClient {
 
         // Add the title as a heading in the final markdown
         var markdownBlocks: [String] = [pageTitle.convertedToMarkdown(.heading1)]
-        markdownBlocks.append(contentsOf: blocks.compactMap({ $0.type.asMarkdown }))
+        markdownBlocks.append(contentsOf: blocks.compactMap { $0.type.asMarkdown })
 
         // Save the markdown file
         let markdown = markdownBlocks.joined(separator: .doubleNewline)

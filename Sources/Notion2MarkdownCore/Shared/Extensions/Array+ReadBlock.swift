@@ -1,27 +1,22 @@
-//
-//  File.swift
-//  Notion2Markdown
-//
-//  Created by Kyle Haptonstall on 9/21/24.
-//
+// Copyright © 2024 Kyle Haptonstall. All rights reserved.
 
 import Foundation
 import NotionSwift
 
-extension Array where Element == ReadBlock {
+extension [ReadBlock] {
     /// Enumerates all blocks and returns each url representing a private (i.e. non-external) image file.
     var imageURLs: [URL] {
         compactMap { block in
             switch block.type {
-            case .image(let value):
+            case let .image(value):
                 switch value.file {
                 case let .file(urlString, _):
-                    return URL(string: urlString)
+                    URL(string: urlString)
                 default:
-                    return nil
+                    nil
                 }
             default:
-                return nil
+                nil
             }
         }
     }

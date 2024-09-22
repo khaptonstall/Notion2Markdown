@@ -43,7 +43,7 @@ extension BlockType {
             // ColumnList and Column aren't converted directly to markdown,
             // however the Column children will be converted (given the child BlockType is supported).
             return nil
-        case .image(let fileBlockValue):
+        case let .image(fileBlockValue):
             let altText = fileBlockValue.asMarkdown
 
             switch fileBlockValue.file {

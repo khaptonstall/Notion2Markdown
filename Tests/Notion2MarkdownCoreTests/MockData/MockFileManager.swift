@@ -1,9 +1,4 @@
-//
-//  File.swift
-//  Notion2Markdown
-//
-//  Created by Kyle Haptonstall on 9/21/24.
-//
+// Copyright © 2024 Kyle Haptonstall. All rights reserved.
 
 import Foundation
 @testable import Notion2MarkdownCore
@@ -25,6 +20,6 @@ class MockFileManager: FileManaging {
         writeInput = string
         writeExpectation?.fulfill()
     }
-    
+
     func moveItem(at srcURL: URL, to dstURL: URL) throws {}
 }
