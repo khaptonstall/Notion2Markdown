@@ -25,6 +25,9 @@ struct CommandLineTool: AsyncParsableCommand {
     @Option(help: "The markdown file output path")
     var output: String = "output.md"
 
+    @Option(help: "Filters the database where a property of type 'Status' matches a specified value. <name>:<value>, e.g. State:Done")
+    var statusFilter: String?
+
     @Flag(help: "Whether the Notion Page's title should be appended as an H1 element to the final output file")
     var prefixPageTitle: Bool = false
 
@@ -45,7 +48,15 @@ struct CommandLineTool: AsyncParsableCommand {
     /// Displays a list of publishable pages and prompts the user to select one.
     /// - Returns: The `Page` the user selected.
     private func selectPageToPublish(notionClient: Notion2MarkdownClient) async throws -> Page {
-        let response = try await notionClient.enumerateDatabasePages(databaseID: databaseID)
+        var params: DatabaseQueryParams = .init()
+        if let statusFilter {
+            params = try .init(filter: DatabaseFilter.statusFilter(commandLineInput: statusFilter))
+        }
+
+        let response = try await notionClient.enumerateDatabasePages(
+            databaseID: databaseID,
+            params: params
+        )
 
         print("Select a page you'd like to publish (enter the page index):")
         for (index, page) in response.enumerated() {
@@ -63,5 +74,19 @@ struct CommandLineTool: AsyncParsableCommand {
         let page = response[selectedIndex]
         print("Selected page \(page.plainTextTitle ?? "Title not found")")
         return page
+    }
+}
+
+// MARK: - Helpers
+
+private extension DatabaseFilter {
+    static func statusFilter(commandLineInput str: String) throws -> Self {
+        let components = str.components(separatedBy: ":")
+        guard components.count == 2 else {
+            throw ArgumentParsingError.invalidStatusFilter
+        }
+        let propertyName = components[0]
+        let propertyValue = components[1]
+        return .property(name: propertyName, type: .status(.equals(propertyValue)))
     }
 }
