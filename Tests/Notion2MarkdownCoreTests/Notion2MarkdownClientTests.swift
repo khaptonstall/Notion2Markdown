@@ -69,18 +69,22 @@ final class Notion2MarkdownClientTests: XCTestCase {
         )
     }
 
-    func testErrors_pageMissingTitle() async throws {
-        let mockNotionClient = MockNotionClient()
-        let client = Notion2MarkdownClient(internalClient: mockNotionClient)
+    func testMarkdownConversion_prefixPageTitle() async throws {
+        let blocks: [ReadBlock] = [
+            .mocked(type: .paragraph([.mocked(string: "Paragraph")])),
+        ]
 
-        do {
-            _ = try await client.convertPageToMarkdown(.mocked(), outputPath: "")
-            XCTFail("Expected error thrown due to page missing a title")
-        } catch let error as Notion2MarkdownError {
-            XCTAssertEqual(error, .pageMissingTitle)
-        } catch {
-            XCTFail("Expected to receive Notion2MarkdownError.pageMissingTitle but got \(error)")
-        }
+        let markdown = """
+        # \(MockData.pageTitle)
+
+        Paragraph
+        """
+
+        try await assertConversionOfBlocks(
+            blocks,
+            matchesMarkdown: markdown,
+            prefixPageTitle: true
+        )
     }
 }
 
@@ -89,7 +93,8 @@ final class Notion2MarkdownClientTests: XCTestCase {
 private extension Notion2MarkdownClientTests {
     func assertConversionOfBlocks(
         _ blocks: [ReadBlock],
-        matchesMarkdown expectedMarkdown: String
+        matchesMarkdown expectedMarkdown: String,
+        prefixPageTitle: Bool = false
     ) async throws {
         let mockNotionClient = MockNotionClient()
         let mockFileManager = MockFileManager()
@@ -103,7 +108,11 @@ private extension Notion2MarkdownClientTests {
 
         let writeExpectation = expectation(description: "Markdown was written to file")
         mockFileManager.writeExpectation = writeExpectation
-        try await client.convertPageToMarkdown(.titledPage(MockData.pageTitle), outputPath: "")
+        try await client.convertPageToMarkdown(
+            .titledPage(MockData.pageTitle),
+            outputPath: "",
+            prefixPageTitle: prefixPageTitle
+        )
         await fulfillment(of: [writeExpectation])
         let actualMarkdown = try XCTUnwrap(mockFileManager.writeInput)
 

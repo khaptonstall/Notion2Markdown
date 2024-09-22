@@ -17,8 +17,6 @@ enum MockData {
     ]
 
     static let numberedListMarkdown: String = """
-    # \(pageTitle)
-
     1. Item 1
 
     1. Item 2
@@ -41,8 +39,6 @@ enum MockData {
     ]
 
     static let bulletedListItemMarkdown: String = """
-    # \(pageTitle)
-
     - Plaintext list item
 
     - **Bold list item**
@@ -65,8 +61,6 @@ enum MockData {
     ]
 
     static let calloutMarkdown: String = """
-    # \(pageTitle)
-
     > Plaintext callout
 
     > **Bold callout**
@@ -86,8 +80,6 @@ enum MockData {
     ]
 
     static let codeMarkdown: String = """
-    # \(pageTitle)
-
     ```Swift
     let foo = "bar"
     ```
@@ -105,8 +97,6 @@ enum MockData {
     ]
 
     static let embedMarkdown: String = """
-    # \(pageTitle)
-
     [](nocaption.com)
 
     [This is a link caption](caption.com)
@@ -121,8 +111,6 @@ enum MockData {
     ]
 
     static let headingMarkdown: String = """
-    # \(pageTitle)
-
     # Heading 1
 
     ## Heading 2
@@ -141,8 +129,6 @@ enum MockData {
     ]
 
     static let quoteMarkdown: String = """
-    # \(pageTitle)
-
     > Plaintext quote
 
     > **Bold quote**
@@ -162,8 +148,6 @@ enum MockData {
     ]
 
     static let todoMarkdown: String = """
-    # \(pageTitle)
-
     - [x] Checked
 
     - [ ] Unchecked
@@ -179,8 +163,6 @@ enum MockData {
     ]
 
     static let imageMarkdown: String = """
-    # \(pageTitle)
-
     ![Private Image](image1.png)
 
     ![](image2.png)
