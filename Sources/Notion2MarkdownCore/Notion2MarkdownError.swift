@@ -11,9 +11,6 @@ public enum Notion2MarkdownError: LocalizedError {
 
     case pageMissingTitle
 
-    /// Occurs when a Notion file is invalid, such as when it cannot be converted to a `URL` type or if its missing a file extension.
-    case invalidFileURL
-
     public var errorDescription: String? {
         switch self {
         case .invalidPageSelectionInput:
@@ -22,8 +19,6 @@ public enum Notion2MarkdownError: LocalizedError {
             "Please choose a valid page index."
         case .pageMissingTitle:
             "Unable to find or parse the title for the page"
-        case .invalidFileURL:
-            "The file url is invalid or missing a file extension"
         }
     }
 }
