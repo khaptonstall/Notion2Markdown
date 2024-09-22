@@ -31,7 +31,7 @@ extension BlockType {
         case let .heading3(headingBlockValue):
             return headingBlockValue.asMarkdown.convertedToMarkdown(.heading3)
         case let .numberedListItem(textAndChildrenBlockValue):
-            return textAndChildrenBlockValue.asMarkdown
+            return textAndChildrenBlockValue.asMarkdown.convertedToMarkdown(.numberedListItem())
         case let .paragraph(textAndChildrenBlockValue):
             return textAndChildrenBlockValue.asMarkdown
         case let .quote(quoteBlockValue):

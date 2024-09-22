@@ -40,7 +40,7 @@ extension MarkdownConverter {
     static let quote: Self = .init { "> \($0)" }
     static let bulletedListItem: Self = .init { "- \($0)" }
 
-    static func numberedListItem(number: Int) -> Self {
+    static func numberedListItem(number: Int = 1) -> Self {
         .init { "\(number). \($0)" }
     }
 

@@ -49,19 +49,9 @@ public struct Notion2MarkdownClient {
         // Add the title as a heading in the final markdown
         markdownBlocks.append(pageTitle.convertedToMarkdown(.heading1))
 
-        // Quick way to handle numbered lists -> just increment each time we encounter one, otherwise reset the value.
-        var currentNumberedListIndex = 1
         for block in blocks {
-            switch block.type {
-            case .numberedListItem:
-                guard let blockMarkdown = block.type.asMarkdown else { continue }
-                markdownBlocks.append(blockMarkdown.convertedToMarkdown(.numberedListItem(number: currentNumberedListIndex)))
-                currentNumberedListIndex += 1
-            default:
-                if currentNumberedListIndex != 1 { currentNumberedListIndex = 1 }
-                guard let blockMarkdown = block.type.asMarkdown else { continue }
-                markdownBlocks.append(blockMarkdown)
-            }
+            guard let blockMarkdown = block.type.asMarkdown else { continue }
+            markdownBlocks.append(blockMarkdown)
         }
 
         return markdownBlocks.joined(separator: .doubleNewline)
