@@ -43,12 +43,25 @@ extension BlockType {
             // ColumnList and Column aren't converted directly to markdown,
             // however the Column children will be converted (given the child BlockType is supported).
             return nil
+        case .image(let fileBlockValue):
+            let altText = fileBlockValue.asMarkdown
+
+            switch fileBlockValue.file {
+            case let .external(urlString):
+                return altText.convertedToMarkdown(.image(url: urlString))
+            case let .file(urlString, _):
+                // urlString should be a signed S3 URL, where the lastPathComponent will be the file name
+                // e.g. https://prod-files-secure.s3.us-west-2.amazonaws.com/<uuid>/<uuid>/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&....
+                guard let url = URL(string: urlString) else { return nil }
+                return altText.convertedToMarkdown(.image(url: url.lastPathComponent))
+            case .unknown:
+                return nil
+            }
         case .audio,
              .breadcrumb,
              .childDatabase,
              .childPage,
              .file,
-             .image,
              .linkToPage,
              .pdf,
              .syncedBlock,
@@ -61,35 +74,6 @@ extension BlockType {
              .video:
             print("⚠️ Skipping unsupported block type \(String(describing: self))")
             return nil
-        }
-    }
-}
-
-extension BlockType.FileBlockValue {
-    /// Downloads the associated image file and produces a markdown string using a relative link to the downloaded image.
-    /// - Parameter parentDirectory: The directory that will be the parent to the images subdirectory.
-    func asMarkdownImage(parentDirectory: String) async throws -> String {
-        switch self.file {
-        case let .external(urlString),
-            let .file(urlString, _):
-            guard let url = URL(string: urlString), !url.pathExtension.isEmpty else {
-                throw Notion2MarkdownError.invalidFileURL
-            }
-
-            let (downloadURL, _) = try await URLSession.shared.download(for: URLRequest(url: url))
-
-            let outputURL = URL(fileURLWithPath: parentDirectory).appending(path: "images")
-            try FileManager.default.createDirectory(at: outputURL, withIntermediateDirectories: true)
-
-            let fileName = "\(UUID().uuidString).\(url.pathExtension)"
-            try FileManager.default.moveItem(
-                at: downloadURL,
-                to: outputURL.appending(path: fileName)
-            )
-
-            return "![](images/\(fileName))"
-        case .unknown:
-            return ""
         }
     }
 }
