@@ -43,7 +43,7 @@ public struct Notion2MarkdownClient {
     }
 
     // MARK: Markdown Conversion
-        
+
     /// - Parameters:
     ///   - page: The Notion `Page` to convert into a markdown file.
     ///   - outputPath: The path in which to write the markdown file (e.g. `./foo/bar/output.md`)
