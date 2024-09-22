@@ -62,6 +62,13 @@ final class Notion2MarkdownClientTests: XCTestCase {
         )
     }
 
+    func testMarkdownConversion_images() async throws {
+        try await assertConversionOfBlocks(
+            MockData.imageBlocks,
+            matchesMarkdown: MockData.imageMarkdown
+        )
+    }
+
     func testErrors_pageMissingTitle() async throws {
         let mockNotionClient = MockNotionClient()
         let client = Notion2MarkdownClient(internalClient: mockNotionClient)

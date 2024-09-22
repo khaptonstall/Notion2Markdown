@@ -168,4 +168,25 @@ enum MockData {
 
     - [ ] Unchecked
     """
+
+    // MARK: Images
+
+    static let imageBlocks: [ReadBlock] = [
+        .mocked(type: .image(file: .file(url: "https://notion.so/image1.png", expiryTime: .now), caption: [.mocked(string: "Private Image")])),
+        .mocked(type: .image(file: .file(url: "https://notion.so/image2.png", expiryTime: .now))),
+        .mocked(type: .image(file: .external(url: "https://notion.so/image3.png"), caption: [.mocked(string: "External Image")])),
+        .mocked(type: .image(file: .external(url: "https://notion.so/image4.png"))),
+    ]
+
+    static let imageMarkdown: String = """
+    # \(pageTitle)
+
+    ![Private Image](image1.png)
+
+    ![](image2.png)
+    
+    ![External Image](https://notion.so/image3.png)
+
+    ![](https://notion.so/image4.png)
+    """
 }
