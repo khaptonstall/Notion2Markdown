@@ -76,3 +76,14 @@ mint run notion2markdown \
 --notion-token <your-notion-token> \
 --database-id <your-database-id> \ 
 ```
+
+### Filtering
+Currently, `notion2markdown` supports filtering the database query based on a Status property type.
+
+The following example is filtering a database that contains a Status property titled `Status` and limits the queried results only to those with the value `Published`: 
+```bash
+mint run notion2markdown \
+--notion-token <your-notion-token> \
+--database-id <your-database-id> \ 
+--status-filter Status:Published
+```
