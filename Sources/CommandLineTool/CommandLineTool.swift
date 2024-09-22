@@ -22,8 +22,8 @@ struct CommandLineTool: AsyncParsableCommand {
     @Option(help: "The identifier of your Notion database to read from.")
     var databaseID: String
 
-    @Option(help: "The directory to output the markdown file and associated assets")
-    var outputDirectory: String = "./"
+    @Option(help: "The markdown file output path")
+    var output: String = "output.md"
 
     // MARK: Command
 
@@ -33,8 +33,8 @@ struct CommandLineTool: AsyncParsableCommand {
         // Select a Page
         let page = try await selectPageToPublish(notionClient: client)
 
-        // Convert to markdown and save to the output directory
-        try await client.convertPageToMarkdown(page, outputDirectory: outputDirectory)
+        // Convert and save to a markdown file
+        try await client.convertPageToMarkdown(page, outputPath: output)
     }
 
     // MARK: Private API

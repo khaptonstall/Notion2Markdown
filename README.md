@@ -74,13 +74,5 @@ To use `notion2markdown`, you'll need both your Notion Integration token and the
 ```bash
 mint run notion2markdown \
 --notion-token <your-notion-token> \
---database-id <your-database-id>
-```
-
-Additionally, if you wish to save the markdown to a local file, supply the `--output-directory` option:
-```bash
-mint run notion2markdown \
---notion-token <your-notion-token> \
---database-id <your-database-id> \
---output-directory <your-output-directory> \
+--database-id <your-database-id> \ 
 ```

@@ -44,11 +44,16 @@ public struct Notion2MarkdownClient {
 
     // MARK: Markdown Conversion
 
-    public func convertPageToMarkdown(_ page: Page, outputDirectory: String) async throws {
+    /// - Parameters:
+    ///   - page: The Notion `Page` to convert into a markdown file.
+    ///   - outputPath: The path in which to write the markdown file (e.g. `./foo/bar/output.md`)
+    public func convertPageToMarkdown(
+        _ page: Page,
+        outputPath: String
+    ) async throws {
         guard let pageTitle = page.plainTextTitle else {
             throw Notion2MarkdownError.pageMissingTitle
         }
-
         // Retrieve the blocks from the page.
         let blocks = try await internalClient.allBlockChildren(blockId: page.id.toBlockIdentifier)
 
@@ -59,11 +64,11 @@ public struct Notion2MarkdownClient {
         // Save the markdown file
         let markdown = markdownBlocks.joined(separator: .doubleNewline)
 
-        let outputURL = URL(fileURLWithPath: outputDirectory, isDirectory: true)
-            .appending(path: "\(pageTitle.replacingOccurrences(of: " ", with: "-")).md")
+        let outputURL = URL(fileURLWithPath: outputPath, isDirectory: true)
         try fileManager.write(markdown, to: outputURL, atomically: true, encoding: .utf8)
 
         // Download all referenced images
+        let outputDirectory = (outputPath as NSString).deletingLastPathComponent
         try await withThrowingTaskGroup(of: Void.self) { group in
             for imageURL in blocks.imageURLs {
                 group.addTask {
