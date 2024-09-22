@@ -13,7 +13,6 @@ public enum Notion2MarkdownError: LocalizedError {
 
     /// Occurs when a Notion file is invalid, such as when it cannot be converted to a `URL` type or if its missing a file extension.
     case invalidFileURL
-}
 
     public var errorDescription: String? {
         switch self {
