@@ -57,6 +57,12 @@ extension MarkdownConverter {
     static func link(url: String) -> Self {
         .init { "[\($0)](\(url))" }
     }
+    
+    /// Converts the string into an image reference, where `self` acts as the alt text.
+    /// - Parameter url: The url (for an external image) or path (for a relative image)
+    static func image(url: String) -> Self {
+        .init { "![\($0)](\(url))" }
+    }
 }
 
 // MARK: - String + MarkdownConverter

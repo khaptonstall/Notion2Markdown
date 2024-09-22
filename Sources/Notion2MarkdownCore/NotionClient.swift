@@ -7,6 +7,8 @@ public struct Notion2MarkdownClient {
     // MARK: Properties
 
     private let internalClient: NotionClientType
+    private let fileManager: FileManaging
+    private let fileDownloader: FileDownloading
 
     // MARK: Initialization
 
@@ -17,8 +19,12 @@ public struct Notion2MarkdownClient {
         self.init(internalClient: client)
     }
 
-    init(internalClient: any NotionClientType) {
+    init(internalClient: NotionClientType,
+         fileManager: FileManaging = FileManager.default,
+         fileDownloader: FileDownloading = URLSession.shared) {
         self.internalClient = internalClient
+        self.fileManager = fileManager
+        self.fileDownloader = fileDownloader
     }
 
     // MARK: Database Query
@@ -36,7 +42,7 @@ public struct Notion2MarkdownClient {
 
     // MARK: Markdown Conversion
 
-    public func convertPageToMarkdown(_ page: Page) async throws -> String {
+    public func convertPageToMarkdown(_ page: Page, outputDirectory: String) async throws {
         guard let pageTitle = page.plainTextTitle else {
             throw Notion2MarkdownError.pageMissingTitle
         }
@@ -44,16 +50,32 @@ public struct Notion2MarkdownClient {
         // Retrieve the blocks from the page.
         let blocks = try await internalClient.allBlockChildren(blockId: page.id.toBlockIdentifier)
 
-        var markdownBlocks: [String] = []
-
         // Add the title as a heading in the final markdown
-        markdownBlocks.append(pageTitle.convertedToMarkdown(.heading1))
+        var markdownBlocks: [String] = [pageTitle.convertedToMarkdown(.heading1)]
+        markdownBlocks.append(contentsOf: blocks.compactMap({ $0.type.asMarkdown }))
 
-        for block in blocks {
-            guard let blockMarkdown = block.type.asMarkdown else { continue }
-            markdownBlocks.append(blockMarkdown)
+        // Save the markdown file
+        let markdown = markdownBlocks.joined(separator: .doubleNewline)
+
+        let outputURL = URL(fileURLWithPath: outputDirectory, isDirectory: true)
+            .appending(path: "\(pageTitle.replacingOccurrences(of: " ", with: "-")).md")
+        try fileManager.write(markdown, to: outputURL, atomically: true, encoding: .utf8)
+
+        // Download all referenced images
+        try await withThrowingTaskGroup(of: Void.self) { group in
+            for imageURL in blocks.imageURLs {
+                group.addTask {
+                    let (downloadURL, _) = try await fileDownloader.download(for: URLRequest(url: imageURL))
+
+                    let outputURL = URL(fileURLWithPath: outputDirectory)
+                    try fileManager.moveItem(
+                        at: downloadURL,
+                        to: outputURL.appending(path: imageURL.lastPathComponent)
+                    )
+                }
+            }
+
+            try await group.waitForAll()
         }
-
-        return markdownBlocks.joined(separator: .doubleNewline)
     }
 }
