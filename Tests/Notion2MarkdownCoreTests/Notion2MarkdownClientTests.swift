@@ -67,7 +67,7 @@ final class Notion2MarkdownClientTests: XCTestCase {
         let client = Notion2MarkdownClient(internalClient: mockNotionClient)
 
         do {
-            _ = try await client.convertPageToMarkdown(.mocked())
+            _ = try await client.convertPageToMarkdown(.mocked(), outputDirectory: "")
             XCTFail("Expected error thrown due to page missing a title")
         } catch let error as Notion2MarkdownError {
             XCTAssertEqual(error, .pageMissingTitle)
@@ -85,11 +85,21 @@ private extension Notion2MarkdownClientTests {
         matchesMarkdown expectedMarkdown: String
     ) async throws {
         let mockNotionClient = MockNotionClient()
-        let client = Notion2MarkdownClient(internalClient: mockNotionClient)
+        let mockFileManager = MockFileManager()
+        let client = Notion2MarkdownClient(
+            internalClient: mockNotionClient,
+            fileManager: mockFileManager,
+            fileDownloader: MockFileDownloader()
+        )
 
         mockNotionClient.blockChildrenResponses = [.success(.init(results: blocks, nextCursor: nil, hasMore: false))]
 
-        let actualMarkdown = try await client.convertPageToMarkdown(.titledPage(MockData.pageTitle))
+        let writeExpectation = expectation(description: "Markdown was written to file")
+        mockFileManager.writeExpectation = writeExpectation
+        try await client.convertPageToMarkdown(.titledPage(MockData.pageTitle), outputDirectory: "")
+        await fulfillment(of: [writeExpectation])
+        let actualMarkdown = try XCTUnwrap(mockFileManager.writeInput)
+
         XCTAssertEqual(actualMarkdown, expectedMarkdown)
     }
 }
