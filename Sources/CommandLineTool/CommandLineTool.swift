@@ -22,7 +22,7 @@ struct CommandLineTool: AsyncParsableCommand {
     @Option(help: "The identifier of your Notion database to read from.")
     var databaseID: String
 
-    @Option(help: "The directory to output the markdown file")
+    @Option(help: "The directory to output the markdown file and associated assets")
     var outputDirectory: String = "./"
 
     // MARK: Command
@@ -32,17 +32,9 @@ struct CommandLineTool: AsyncParsableCommand {
 
         // Select a Page
         let page = try await selectPageToPublish(notionClient: client)
-        guard let pageTitle = page.plainTextTitle else {
-            throw Notion2MarkdownError.pageMissingTitle
-        }
 
-        // Convert to markdown
-        let markdown = try await client.convertPageToMarkdown(page)
-
-        // Save the markdown to a file
-        let outputURL = URL(fileURLWithPath: outputDirectory, isDirectory: true)
-            .appending(path: "\(pageTitle.replacingOccurrences(of: " ", with: "-")).md")
-        try markdown.write(to: outputURL, atomically: true, encoding: .utf8)
+        // Convert to markdown and save to the output directory
+        try await client.convertPageToMarkdown(page, outputDirectory: outputDirectory)
     }
 
     // MARK: Private API

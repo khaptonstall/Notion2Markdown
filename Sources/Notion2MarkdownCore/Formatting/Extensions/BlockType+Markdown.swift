@@ -31,7 +31,7 @@ extension BlockType {
         case let .heading3(headingBlockValue):
             return headingBlockValue.asMarkdown.convertedToMarkdown(.heading3)
         case let .numberedListItem(textAndChildrenBlockValue):
-            return textAndChildrenBlockValue.asMarkdown
+            return textAndChildrenBlockValue.asMarkdown.convertedToMarkdown(.numberedListItem())
         case let .paragraph(textAndChildrenBlockValue):
             return textAndChildrenBlockValue.asMarkdown
         case let .quote(quoteBlockValue):
@@ -43,12 +43,25 @@ extension BlockType {
             // ColumnList and Column aren't converted directly to markdown,
             // however the Column children will be converted (given the child BlockType is supported).
             return nil
+        case let .image(fileBlockValue):
+            let altText = fileBlockValue.asMarkdown
+
+            switch fileBlockValue.file {
+            case let .external(urlString):
+                return altText.convertedToMarkdown(.image(url: urlString))
+            case let .file(urlString, _):
+                // urlString should be a signed S3 URL, where the lastPathComponent will be the file name
+                // e.g. https://prod-files-secure.s3.us-west-2.amazonaws.com/<uuid>/<uuid>/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&....
+                guard let url = URL(string: urlString) else { return nil }
+                return altText.convertedToMarkdown(.image(url: url.lastPathComponent))
+            case .unknown:
+                return nil
+            }
         case .audio,
              .breadcrumb,
              .childDatabase,
              .childPage,
              .file,
-             .image,
              .linkToPage,
              .pdf,
              .syncedBlock,

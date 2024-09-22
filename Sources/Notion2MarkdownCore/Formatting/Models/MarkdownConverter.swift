@@ -40,7 +40,7 @@ extension MarkdownConverter {
     static let quote: Self = .init { "> \($0)" }
     static let bulletedListItem: Self = .init { "- \($0)" }
 
-    static func numberedListItem(number: Int) -> Self {
+    static func numberedListItem(number: Int = 1) -> Self {
         .init { "\(number). \($0)" }
     }
 
@@ -56,6 +56,12 @@ extension MarkdownConverter {
 
     static func link(url: String) -> Self {
         .init { "[\($0)](\(url))" }
+    }
+
+    /// Converts the string into an image reference, where `self` acts as the alt text.
+    /// - Parameter url: The url (for an external image) or path (for a relative image)
+    static func image(url: String) -> Self {
+        .init { "![\($0)](\(url))" }
     }
 }
 
