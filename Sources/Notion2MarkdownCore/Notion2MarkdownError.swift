@@ -9,16 +9,12 @@ public enum Notion2MarkdownError: LocalizedError {
     /// Occurs when providing an invalid index when prompted to select a page to publish
     case invalidPageSelectionIndex
 
-    case pageMissingTitle
-
     public var errorDescription: String? {
         switch self {
         case .invalidPageSelectionInput:
             "Please enter a valid integer index."
         case .invalidPageSelectionIndex:
             "Please choose a valid page index."
-        case .pageMissingTitle:
-            "Unable to find or parse the title for the page"
         }
     }
 }

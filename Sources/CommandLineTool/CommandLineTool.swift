@@ -25,6 +25,9 @@ struct CommandLineTool: AsyncParsableCommand {
     @Option(help: "The markdown file output path")
     var output: String = "output.md"
 
+    @Flag(help: "Whether the Notion Page's title should be appended as an H1 element to the final output file")
+    var prefixPageTitle: Bool = false
+
     // MARK: Command
 
     mutating func run() async throws {
@@ -34,7 +37,7 @@ struct CommandLineTool: AsyncParsableCommand {
         let page = try await selectPageToPublish(notionClient: client)
 
         // Convert and save to a markdown file
-        try await client.convertPageToMarkdown(page, outputPath: output)
+        try await client.convertPageToMarkdown(page, outputPath: output, prefixPageTitle: prefixPageTitle)
     }
 
     // MARK: Private API

@@ -47,18 +47,20 @@ public struct Notion2MarkdownClient {
     /// - Parameters:
     ///   - page: The Notion `Page` to convert into a markdown file.
     ///   - outputPath: The path in which to write the markdown file (e.g. `./foo/bar/output.md`)
+    ///   - prefixPageTitle: Whether to prefix that page's title as an H1 element to the final markdown.
     public func convertPageToMarkdown(
         _ page: Page,
-        outputPath: String
+        outputPath: String,
+        prefixPageTitle: Bool = false
     ) async throws {
-        guard let pageTitle = page.plainTextTitle else {
-            throw Notion2MarkdownError.pageMissingTitle
-        }
         // Retrieve the blocks from the page.
         let blocks = try await internalClient.allBlockChildren(blockId: page.id.toBlockIdentifier)
 
         // Add the title as a heading in the final markdown
-        var markdownBlocks: [String] = [pageTitle.convertedToMarkdown(.heading1)]
+        var markdownBlocks: [String] = []
+        if prefixPageTitle, let pageTitle = page.plainTextTitle {
+            markdownBlocks.append(pageTitle.convertedToMarkdown(.heading1))
+        }
         markdownBlocks.append(contentsOf: blocks.compactMap { $0.type.asMarkdown })
 
         // Save the markdown file
